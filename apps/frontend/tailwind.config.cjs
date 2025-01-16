@@ -12,6 +12,9 @@ module.exports = {
         accent: "var(--accent)",
       },
     },
+    screens: {
+      xs: "400px",
+    },
   },
   plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"), require("@tailwindcss/aspect-ratio")],
 };
