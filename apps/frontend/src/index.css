@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  line-height: 1.5;
+  font-size: 16px;
+  font-variant-ligatures: no-common-ligatures;
+
+  --text: #fafafa;
+  --subtext: #a1a1aa;
+  --background: #090609;
+  --primary: #b94680;
+  --secondary: #1a0a0a;
+  --accent: #ed6eed;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  padding: 2px;
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text);
+  overflow-y: hidden;
+}

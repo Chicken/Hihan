@@ -1,0 +1,37 @@
+FROM node:22-alpine AS build
+
+ENV CI=true
+ENV FORCE_COLOR=true
+WORKDIR /app
+
+COPY ./apps/backend ./
+
+RUN corepack enable
+RUN pnpm install
+
+RUN pnpm build
+
+
+
+FROM node:22-alpine AS runner
+
+ENV CI=true
+ENV FORCE_COLOR=true
+ENV NODE_ENV="production"
+WORKDIR /app
+
+RUN apk add --no-cache dumb-init
+
+COPY ./apps/backend/package.json ./
+
+RUN corepack enable
+RUN pnpm install --prod
+
+COPY ./apps/backend/drizzle.config.ts ./
+COPY ./apps/backend/migrations/ migrations/
+COPY --from=build /app/dist/ dist/
+
+USER node:node
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD [ "pnpm", "start" ]

@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@antticodes/hihan",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Antti <antti@antti.codes>",
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier -w ."
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.6.9"
+  },
+  "prettier": {
+    "plugins": [
+      "prettier-plugin-tailwindcss"
+    ],
+    "tailwindConfig": "apps/frontend/tailwind.config.cjs",
+    "printWidth": 120,
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "consistent",
+    "trailingComma": "es5",
+    "bracketSpacing": true,
+    "arrowParens": "always",
+    "endOfLine": "lf",
+    "overrides": [
+      {
+        "files": [
+          "apps/frontend/**",
+          "*.json",
+          "*.yml"
+        ],
+        "options": {
+          "tabWidth": 2
+        }
+      }
+    ]
+  }
+}
