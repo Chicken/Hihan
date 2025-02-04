@@ -33,16 +33,25 @@ function renderTimestamp(ts: number) {
 
 export function Comment({ comment }: { comment: Comment }) {
   return (
-    <div className="flex w-full flex-row gap-2">
-      <CircleUserRound className="h-8 w-8 flex-shrink-0 text-subtext" />
-      <div>
-        <div className="flex flex-row gap-2">
-          <span className="max-w-80 text-wrap rounded-md bg-secondary px-1 py-0.5">{comment.name}</span>
-          <wbr />
-          <span className="whitespace-nowrap text-subtext">{renderTimestamp(comment.timestamp)}</span>
+    <div>
+      <div className="flex w-full flex-row gap-2">
+        <CircleUserRound className="h-8 w-8 flex-shrink-0 text-subtext" />
+        <div>
+          <div className="flex flex-row gap-2">
+            <span className="max-w-80 text-wrap rounded-md bg-secondary px-1 py-0.5">{comment.name}</span>
+            <wbr />
+            <span className="whitespace-nowrap text-subtext">{renderTimestamp(comment.timestamp)}</span>
+          </div>
+          <div className="p-1">{renderContent(comment.content)}</div>
         </div>
-        <div className="p-1">{renderContent(comment.content)}</div>
       </div>
+      {comment.replies?.length ? (
+        <div className="ml-4 border-l-2 border-primary pl-4">
+          {comment.replies.map((reply) => (
+            <Comment key={reply.id} comment={reply} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

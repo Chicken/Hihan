@@ -17,7 +17,7 @@ export function Comments() {
     queryKey: ["comments", id, page],
     placeholderData: keepPreviousData,
     queryFn: async () => {
-      const res = await fetch(`/api/${id}?page=${page}`);
+      const res = await fetch(`/api/${id}/comments?page=${page}`);
       if (res.status !== 200) {
         throw new Error("Failed to fetch comments");
       }

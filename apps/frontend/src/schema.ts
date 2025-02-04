@@ -12,7 +12,7 @@ export type Comment = z.infer<typeof baseCommentSchema> & {
 };
 
 const commentSchema: z.ZodType<Comment> = baseCommentSchema.extend({
-  replies: z.lazy(() => z.array(commentSchema)),
+  replies: z.array(baseCommentSchema),
 });
 
 export const dataSchema = z.object({

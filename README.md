@@ -6,6 +6,7 @@
 
 ## Todo
 
-- Frontend replies
+- Frontend reply sending
+- Nested replies
 - GitHub oauth
 - Edit, delete, like, dislike comments
