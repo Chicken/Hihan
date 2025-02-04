@@ -19,8 +19,8 @@ export const comments = sqliteTable(
             .primaryKey(),
         embedId: text("embed_id")
             .notNull()
-            .references(() => embeds.id),
-        inReplyId: text("in_reply_id").references((): AnySQLiteColumn => comments.id),
+            .references(() => embeds.id, { onDelete: "cascade" }),
+        inReplyId: text("in_reply_id").references((): AnySQLiteColumn => comments.id, { onDelete: "cascade" }),
         timestamp: int().notNull(),
         name: text().notNull(),
         content: text().notNull(),

@@ -23,12 +23,16 @@ app.get("/", (req, res) => {
     res.send("Hello, World!");
 });
 
-app.post("/api/new-embed", async (req, res) => {
+function tokenAuth(req: Request, res: Response, next: NextFunction) {
     const [authMethod, authToken] = (req.headers.authorization ?? "").split(" ");
     if (authMethod !== "Bearer" || authToken !== env.TOKEN) {
         res.status(401).json({ error: "Not authorized" });
         return;
     }
+    next();
+}
+
+app.post("/api/new-embed", tokenAuth, async (req, res) => {
     const inserted = await db.insert(embeds).values({}).returning({ id: embeds.id });
     const id = inserted[0]!.id;
     assert(id);
@@ -146,7 +150,7 @@ app.post(
             const existing = await db
                 .select({ id: comments.id })
                 .from(comments)
-                .where(and(eq(comments.id, req.body.inReply), isNull(comments.inReplyId)))
+                .where(and(eq(comments.embedId, embed.id), eq(comments.id, req.body.inReply), isNull(comments.inReplyId)))
                 .limit(1);
             if (!existing.length) {
                 res.status(404).json({ error: "Comment to reply not found" });
@@ -174,6 +178,24 @@ app.post(
         });
     }
 );
+
+app.delete("/api/:embedId/comments/:commentId", tokenAuth, async (req, res) => {
+    const embedId = req.params.embedId;
+    const commentId = req.params.commentId;
+    if (!embedId || !commentId) {
+        res.status(400).json({ error: "Invalid ID" });
+        return;
+    }
+
+    const comment = await db.query.comments.findFirst({ where: and(eq(comments.embedId, embedId), eq(comments.id, commentId)) });
+    if (!comment) {
+        res.status(404).json({ error: "Comment not found" });
+        return;
+    }
+
+    await db.delete(comments).where(eq(comments.id, commentId));
+    res.status(200).json({ message: "Success" });
+});
 
 app.use("/api", async (req, res) => {
     res.status(404).json({ error: "Not found" });
